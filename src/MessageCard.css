@@ -1,9 +1,11 @@
 .MessageCard {
   display: flex;
-  border: 1px solid black;
+  width:100%;
+  margin:25px 0;
 }
 
 .peepsInfo {
+  width:25%;
   display: flex;
 }
 
@@ -18,5 +20,14 @@
 }
 
 .textArea {
-  margin: auto;
+  text-align: left;
+  margin-left: 100px;
+}
+
+.MessageBox{
+  width:75%;
+}
+
+.date{
+  font-size:13px;
 }

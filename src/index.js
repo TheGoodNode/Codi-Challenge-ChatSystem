@@ -6,6 +6,8 @@ import "./styles.css";
 
 import MessageCard from "./messageCard.js";
 
+import { CreateTime } from "./utils/utils.js";
+
 class App extends Component {
   state = {
     isConnected: false,
@@ -40,10 +42,12 @@ class App extends Component {
     );
 
     this.socket.on("room", old_messages => {
-      // console.log(old_messages)
+      console.log(old_messages)
       this.setState({ messages: old_messages });
       
     });
+    
+    this.socket.emit("whoami");
   }
 
   handleChange = e => {
@@ -51,21 +55,25 @@ class App extends Component {
   };
 
   sendMessage = e => {
-    e.preventDefault();
-    if (this.state.text !== "") {
-      this.socket.emit("message", {
+        const MessageInfo = {
         id: this.state.id,
         name: "Willy_The_Chilly",
         text: this.state.text
-      });
+    }
+    e.preventDefault();
+    if (this.state.text !== "") {
+      this.socket.emit("message", MessageInfo);
       this.setState({ text: "" });
+
+      const data = [...this.state.messages];
+      data.push(MessageInfo);
+      this.setState({messages: data})
     } else {
       return;
     }
   };
 
   componentWillUnmount() {
-    this.socket.emit("whoami");
     this.socket.close();
     this.socket = null;
   }
@@ -85,6 +93,7 @@ class App extends Component {
               id={peep.id}
               name={peep.name}
               text={peep.text}
+              date={peep.date}
             />
           ))}
         </div>
