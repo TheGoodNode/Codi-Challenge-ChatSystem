@@ -12,7 +12,7 @@ class App extends Component {
     id: null,
     peeps: [],
     text: "",
-    Messages: []
+    messages: [],
   };
   socket = null;
 
@@ -39,9 +39,10 @@ class App extends Component {
       console.log(message_from_server)
     );
 
-    /** this will be useful way, way later **/
     this.socket.on("room", old_messages => {
-      this.setState({ Messages: old_messages });
+      // console.log(old_messages)
+      this.setState({ messages: old_messages });
+      
     });
   }
 
@@ -70,7 +71,6 @@ class App extends Component {
   }
 
   render() {
-    console.log();
     return (
       <div className="App">
         <div>
@@ -79,7 +79,7 @@ class App extends Component {
         <div>Online peeps: {this.state.peeps.length}</div>
 
         <div>
-          {this.state.Messages.map(peep => (
+          {this.state.messages.map(peep => (
             <MessageCard
               key={Math.random() * 1000}
               id={peep.id}
