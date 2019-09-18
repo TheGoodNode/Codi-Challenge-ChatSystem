@@ -7,6 +7,22 @@
 .App {
   font-family: sans-serif;
   text-align: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.header{
+  background-color: red;
+}
+
+.status {
+  display: flex;
+  background-color:yellow;
+}
+
+.messagesArea {
+  height: 87%;
+  overflow-y: auto;
 }
 
 .chatArea {

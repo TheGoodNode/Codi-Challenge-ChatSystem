@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import io from "socket.io-client";
 
 import "./styles.css";
-
+import "./led.css";
 import MessageCard from "./messageCard.js";
 
 import { CreateTime } from "./utils/utils.js";
@@ -14,7 +14,7 @@ class App extends Component {
     id: null,
     peeps: [],
     text: "",
-    messages: [],
+    messages: []
   };
   socket = null;
 
@@ -42,11 +42,10 @@ class App extends Component {
     );
 
     this.socket.on("room", old_messages => {
-      console.log(old_messages)
+      console.log(old_messages);
       this.setState({ messages: old_messages });
-      
     });
-    
+
     this.socket.emit("whoami");
   }
 
@@ -55,11 +54,12 @@ class App extends Component {
   };
 
   sendMessage = e => {
-        const MessageInfo = {
-        id: this.state.id,
-        name: "Willy_The_Chilly",
-        text: this.state.text
-    }
+    const MessageInfo = {
+      id: this.state.id,
+      name: "Willy_The_Chilly",
+      text: this.state.text,
+      date: this.CreateTime,
+    };
     e.preventDefault();
     if (this.state.text !== "") {
       this.socket.emit("message", MessageInfo);
@@ -67,7 +67,7 @@ class App extends Component {
 
       const data = [...this.state.messages];
       data.push(MessageInfo);
-      this.setState({messages: data})
+      this.setState({ messages: data });
     } else {
       return;
     }
@@ -78,15 +78,36 @@ class App extends Component {
     this.socket = null;
   }
 
+  renderOnlineLight = () => {
+    return (
+      <div class="led-box">
+        <div class="led-green"></div>
+      </div>
+    );
+  };
+
+  renderOfflineLight = () => {
+    return (
+      <div class="led-box">
+        <div class="led-red"></div>
+      </div>
+    );
+  };
+
   render() {
     return (
       <div className="App">
-        <div>
-          status: {this.state.isConnected ? "connected" : "disconnected"}
+        <div className="header">
+          <div className="status">
+            <div >Status:</div>
+            {this.state.isConnected
+              ? this.renderOnlineLight()
+              : this.renderOfflineLight()}
+          </div>
         </div>
-        <div>Online peeps: {this.state.peeps.length}</div>
+        {/* <div>Online peeps: {this.state.peeps.length}</div> */}
 
-        <div>
+        <div className="messagesArea">
           {this.state.messages.map(peep => (
             <MessageCard
               key={Math.random() * 1000}
@@ -97,15 +118,18 @@ class App extends Component {
             />
           ))}
         </div>
-        <div className="chatArea">
-          <button className="sendbtn" onClick={this.sendMessage}>
+        <div >
+          <form className="chatArea" onSubmit={this.sendMessage}>
+          <button className="sendbtn"type="submit">
             Send
           </button>
           <input
             className="textArea"
             name="text"
             onChange={this.handleChange}
+            value={this.state.text}
           />
+          </form>
         </div>
       </div>
     );

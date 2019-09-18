@@ -8,7 +8,7 @@ export default function MessageCard({ id, name, text, date }) {
         <p className="peepsId">{id}</p>
       </div>
       <div className="MessageBox">
-        <p className="textArea">{text}</p>
+        <p className="messageArea">{text}</p>
       </div>
       <time className="date">{date}</time>
     </div>
